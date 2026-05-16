@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers; // 👈 VÉRIFIE BIEN CETTE LIGNE ! Elle doit être exactement là.
+namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        // 2. Partage le compte des messages non lus
+        // 2. Partage le compte des messages non lus de maniere securisee
         View::composer('*', function ($view) {
             if (Auth::check()) {
                 try {
@@ -39,7 +39,9 @@ class AppServiceProvider extends ServiceProvider
                 } catch (\Exception $e) {
                     $view->with('unreadMessagesCount', 0);
                 }
+            } else {
+                $view->with('unreadMessagesCount', 0);
             }
         });
     }
-} // 👈 Assure-toi que cette accolade ferme bien la classe à la toute fin
+}
