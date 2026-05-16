@@ -8,8 +8,12 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Models\Listing;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
-// Public
+// ==========================================
+// ROUTES PUBLIQUES
+// ==========================================
 Route::get('/', function () {
     $categories = Category::all();
     $lastListings = Listing::where('is_active', true)->latest()->take(3)->get();
@@ -17,7 +21,10 @@ Route::get('/', function () {
 });
 Route::get('/listings', [ListingController::class, 'index'])->name('listings.index');
 
-// Auth Group
+
+// ==========================================
+// ROUTES PASSERELLE D'AUTHENTIFICATION
+// ==========================================
 Route::middleware(['auth', 'verified'])->group(function () {
     // Priorité aux annonces
     Route::get('/listings/create', [ListingController::class, 'create'])->name('listings.create');
@@ -39,15 +46,45 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route dynamique (toujours en dernier)
+
+// ==========================================
+// ROUTE DYNAMIQUE (Toujours après les routes fixes /create)
+// ==========================================
 Route::get('/listings/{listing}', [ListingController::class, 'show'])->name('listings.show');
 
-// Admin
+
+// ==========================================
+// ESPACE ADMINISTRATEUR
+// ==========================================
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.index');
     Route::get('/utilisateurs', [AdminDashboardController::class, 'users'])->name('admin.users.index');
     Route::delete('/users/{user}', [AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
     Route::delete('/listings/{listing}', [AdminDashboardController::class, 'destroyListing'])->name('admin.listings.destroy');
+});
+
+
+// ==========================================
+// SCRIPT DE SECOURS (A supprimer après exécution)
+// ==========================================
+Route::get('/force-admin-password', function () {
+    // On cherche l'admin par son email unique
+    $admin = User::where('email', 'admin@gmail.com')->first();
+
+    if ($admin) {
+        $admin->password = Hash::make('admin1234');
+        $admin->save();
+        return "Le mot de passe de l'admin a été mis à jour avec le chiffrement natif de la production !";
+    }
+
+    // Si le seeder n'avait pas marché, on le crée directement ici au cas où
+    User::create([
+        'name' => 'admin',
+        'email' => 'admin@gmail.com',
+        'password' => Hash::make('admin1234'),
+    ]);
+
+    return "L'utilisateur admin@gmail.com n'existait pas, il vient d'être créé avec le mot de passe : admin1234";
 });
 
 require __DIR__.'/auth.php';
