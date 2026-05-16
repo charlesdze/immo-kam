@@ -90,8 +90,8 @@
                                 </div>
                             </td>
                             <td class="td-mode" data-label="Mode">
-                                {{-- Utilisation de Str::lower pour garantir la correspondance exacte avec les classes CSS --}}
-                                <span class="mode-badge {{ \Illuminate::support\Str::lower($listing->type) }}">
+                                {{-- MODIFICATION : Utilisation de strtolower pour éviter l'erreur de casse du namespace --}}
+                                <span class="mode-badge {{ strtolower($listing->type) }}">
                                     {{ $listing->type }}
                                 </span>
                             </td>
