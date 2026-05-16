@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -24,23 +23,23 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-   public function store(LoginRequest $request): RedirectResponse
-{
-    // 1. Valide l'email et le mot de passe via la LoginRequest que tu as envoyée
-    $request->authenticate();
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        // 1. Valide l'email et le mot de passe via la LoginRequest
+        $request->authenticate();
 
-    // 2. Régénère la session pour éviter les attaques de fixation de session
-    $request->session()->regenerate();
+        // 2. Régénère la session pour éviter les attaques de fixation de session
+        $request->session()->regenerate();
 
-    // 3. LOGIQUE DE REDIRECTION PERSONNALISÉE
-    // On vérifie si l'utilisateur qui vient de se connecter est admin
-    if ($request->user()->is_admin) {
-        return redirect()->route('admin.index'); 
+        // 3. LOGIQUE DE REDIRECTION CORRIGÉE
+        // On vérifie si la colonne 'role' en base de données vaut exactement 'admin'
+        if ($request->user()->role === 'admin') {
+            return redirect()->route('admin.index'); 
+        }
+
+        // Sinon, on redirige l'utilisateur simple vers sa page par défaut (/dashboard)
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
-
-    // Sinon, on le redirige vers sa page par défaut (souvent /dashboard)
-    return redirect()->intended(RouteServiceProvider::HOME);
-}
 
     /**
      * Destroy an authenticated session.
