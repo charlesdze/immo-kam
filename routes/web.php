@@ -85,6 +85,6 @@ Route::get('/force-admin-password', function () {
     ]);
 
     return "L'utilisateur admin@gmail.com n'existait pas, il vient d'être créé avec le mot de passe : admin1234";
-});
+});// Force update pour le fix de l'admin
 
 require __DIR__.'/auth.php';
