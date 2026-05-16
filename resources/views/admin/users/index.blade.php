@@ -33,7 +33,7 @@
             <tbody>
                 @foreach($users as $user)
                     <tr class="user-row">
-                        <td>
+                        <td data-label="Identité Numérique">
                             <div class="user-identity">
                                 {{-- Avatar Stylisé avec Initiale --}}
                                 <div class="avatar-box {{ $user->is_admin ? 'admin-glow' : 'user-glow' }}">
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Niveau de Privilège">
                             @if($user->is_admin)
                                 <div class="privilege-badge admin">
                                     <span class="shield-icon">🛡️</span> ROOT_ACCESS
@@ -56,14 +56,14 @@
                                 </div>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Date d'entrée">
                             <span class="date-stamp">
                                 {{ $user->created_at ? $user->created_at->format('d/m/Y') : 'DATA_NULL' }}
                             </span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" data-label="Action Commande">
                             @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('ACTION CRITIQUE : Confirmer la révocation définitive ?');">
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('ACTION CRITIQUE : Confirmer la révocation définitive ?');" style="display: inline-block; width: 100%;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-revoke">
@@ -112,6 +112,7 @@
         margin-bottom: 40px;
         border-bottom: 3px solid var(--sentinel-border);
         padding-bottom: 25px;
+        gap: 20px;
     }
 
     .directory-title { font-size: 2.2rem; font-weight: 950; color: var(--sentinel-dark); margin: 0; letter-spacing: -2px; text-transform: uppercase; }
@@ -127,6 +128,7 @@
 
     .pulse-icon {
         width: 8px; height: 8px; background: var(--sentinel-blue); border-radius: 50%;
+        flex-shrink: 0;
         box-shadow: 0 0 0 rgba(49, 130, 206, 0.4);
         animation: pulse 2s infinite;
     }
@@ -141,6 +143,7 @@
         font-size: 0.7rem;
         letter-spacing: 1px;
         transition: 0.3s;
+        white-space: nowrap;
     }
     .btn-dashboard:hover { transform: translateX(-5px); background: var(--sentinel-blue); }
 
@@ -163,25 +166,27 @@
 
     .user-row { border-bottom: 1px solid #f1f5f9; transition: 0.2s; }
     .user-row:hover { background: #fcfdfe; }
+    .sentinel-table td { padding: 22px 35px; }
 
     .user-identity { display: flex; align-items: center; gap: 20px; }
     
     .avatar-box {
         height: 48px; width: 48px; border-radius: 15px;
         display: flex; align-items: center; justify-content: center;
-        font-weight: 900; font-size: 1.2rem;
+        font-weight: 900; font-size: 1.2rem; flex-shrink: 0;
     }
     .admin-glow { background: #faf5ff; color: var(--sentinel-purple); border: 2px solid #e9d8fd; }
     .user-glow { background: #f0f9ff; color: var(--sentinel-blue); border: 2px solid #bae6fd; }
 
-    .user-name { font-weight: 900; color: var(--sentinel-dark); font-size: 0.95rem; }
-    .user-id-tag { font-family: var(--font-mono); font-size: 0.7rem; color: #94a3b8; margin-top: 3px; }
+    .user-name { font-weight: 900; color: var(--sentinel-dark); font-size: 0.95rem; word-break: break-all; }
+    .user-id-tag { font-family: var(--font-mono); font-size: 0.7rem; color: #94a3b8; margin-top: 3px; word-break: break-all; }
 
     /* Badges */
     .privilege-badge {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 6px 14px; border-radius: 8px;
         font-size: 0.65rem; font-weight: 900; letter-spacing: 0.5px;
+        white-space: nowrap;
     }
     .privilege-badge.admin { background: #805ad5; color: white; }
     .privilege-badge.user { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
@@ -192,13 +197,14 @@
     .btn-revoke {
         background: transparent; border: 2px solid #fee2e2; color: var(--sentinel-red);
         padding: 10px 18px; border-radius: 12px; font-size: 0.65rem; font-weight: 900;
-        cursor: pointer; transition: 0.3s;
+        cursor: pointer; transition: 0.3s; width: 100%; max-width: 160px; text-align: center;
     }
     .btn-revoke:hover { background: var(--sentinel-red); color: white; border-color: var(--sentinel-red); transform: scale(1.05); }
 
     .session-badge {
         font-size: 0.65rem; color: #cbd5e1; font-weight: 900;
         padding: 10px 18px; border: 2px dashed #e2e8f0; border-radius: 12px;
+        display: inline-block; text-align: center;
     }
 
     .text-right { text-align: right !important; }
@@ -215,6 +221,39 @@
         0% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(49, 130, 206, 0); }
         100% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0); }
+    }
+
+    /* ========================================================
+       MEDIA QUERIES : ADAPTATION TERMINAL DIRECTORY (MOBILE)
+       ======================================================== */
+    @media (max-width: 768px) {
+        .directory-container { margin: 15px auto; padding: 0 10px; }
+
+        /* 1. Refonte complète du Header */
+        .directory-header { flex-direction: column; align-items: flex-start; gap: 20px; padding-bottom: 20px; }
+        .btn-dashboard { width: 100%; text-align: center; box-sizing: border-box; }
+
+        /* 2. Transformation de la table en fiches */
+        .sentinel-table thead { display: none; }
+        .user-row { display: block; padding: 15px; border-bottom: 3px solid var(--sentinel-border); }
+        .sentinel-table td { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 !important; border: none; text-align: right !important; }
+
+        /* Injection automatique des labels */
+        .sentinel-table td::before {
+            content: attr(data-label);
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: #94a3b8;
+            text-align: left;
+            padding-right: 15px;
+        }
+
+        /* Ajustement des composants internes */
+        .user-identity { width: 100%; justify-content: flex-end; text-align: right; }
+        .user-info { text-align: right; }
+        .btn-revoke { max-width: 100%; width: auto; }
+        .text-right { text-align: right !important; }
     }
 </style>
 @endsection

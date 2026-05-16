@@ -23,9 +23,9 @@
 
             {{-- NOM COMPLET --}}
             <div class="form-field">
-                <label>Nom complet de l'opérateur</label>
+                <label for="name">Nom complet de l'opérateur</label>
                 <div class="input-container">
-                    <input type="text" name="name" value="{{ old('name') }}" required autofocus placeholder="Ex: Jean Dupont">
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" placeholder="Ex: Jean Dupont">
                     <div class="input-indicator"></div>
                 </div>
                 <x-input-error :messages="$errors->get('name')" class="field-error" />
@@ -33,9 +33,9 @@
 
             {{-- EMAIL --}}
             <div class="form-field">
-                <label>Identifiant de messagerie</label>
+                <label for="email">Identifiant de messagerie</label>
                 <div class="input-container">
-                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="nom@exemple.com">
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="username" placeholder="nom@exemple.com">
                     <div class="input-indicator"></div>
                 </div>
                 <x-input-error :messages="$errors->get('email')" class="field-error" />
@@ -44,20 +44,21 @@
             {{-- PASSWORDS GRID --}}
             <div class="password-grid">
                 <div class="form-field">
-                    <label>Clé de sécurité</label>
+                    <label for="password">Clé de sécurité</label>
                     <div class="input-container">
-                        <input type="password" name="password" required placeholder="••••••••">
+                        <input type="password" id="password" name="password" required autocomplete="new-password" placeholder="••••••••">
                     </div>
                 </div>
 
                 <div class="form-field">
-                    <label>Confirmation</label>
+                    <label for="password_confirmation">Confirmation</label>
                     <div class="input-container">
-                        <input type="password" name="password_confirmation" required placeholder="••••••••">
+                        <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••">
                     </div>
                 </div>
             </div>
-            <x-input-error :messages="$errors->get('password')" class="field-error error-mt" />
+            {{-- Zone d'erreur relocalisée proprement --}}
+            <x-input-error :messages="$errors->get('password')" class="field-error password-error-zone" />
 
             {{-- BOUTON ACTION --}}
             <button type="submit" class="btn-deploy">
@@ -98,17 +99,18 @@
 
     .register-card {
         width: 100%;
-        max-width: 520px;
+        max-width: 540px;
         background: white;
-        padding: 60px 50px;
+        padding: 50px 45px;
         border-radius: 40px;
         box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.08);
         border: 1px solid white;
         animation: slideUp 0.8s var(--ease);
+        box-sizing: border-box;
     }
 
     /* Header & Breadcrumbs */
-    .register-header { text-align: center; margin-bottom: 50px; }
+    .register-header { text-align: center; margin-bottom: 40px; }
     
     .icon-deploy {
         display: inline-flex;
@@ -116,7 +118,7 @@
         color: white;
         padding: 16px;
         border-radius: 22px;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         box-shadow: 0 15px 30px rgba(49, 130, 206, 0.3);
     }
     .icon-deploy svg { width: 32px; height: 32px; }
@@ -138,7 +140,7 @@
     .path-active { color: var(--reg-blue); }
 
     /* Fields */
-    .register-form { display: flex; flex-direction: column; gap: 30px; }
+    .register-form { display: flex; flex-direction: column; gap: 24px; }
     
     .form-field label {
         display: block;
@@ -146,7 +148,7 @@
         font-weight: 900;
         color: #475569;
         text-transform: uppercase;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         letter-spacing: 1.5px;
         padding-left: 6px;
     }
@@ -156,12 +158,13 @@
         width: 100%;
         background: var(--reg-bg-soft);
         border: 2px solid var(--reg-border);
-        padding: 18px 22px;
-        border-radius: 20px;
+        padding: 16px 20px;
+        border-radius: 18px;
         font-weight: 700;
         font-size: 0.95rem;
         transition: all 0.4s var(--ease);
         color: var(--reg-dark);
+        box-sizing: border-box;
     }
 
     .input-container input:focus {
@@ -178,12 +181,12 @@
         background: var(--reg-blue);
         color: white;
         border: none;
-        padding: 22px;
-        border-radius: 24px;
+        padding: 20px;
+        border-radius: 20px;
         font-weight: 950;
         font-size: 0.9rem;
         text-transform: uppercase;
-        letter-spacing: 3px;
+        letter-spacing: 2px;
         cursor: pointer;
         transition: all 0.4s var(--ease);
         display: flex;
@@ -192,47 +195,54 @@
         gap: 12px;
         box-shadow: 0 15px 35px rgba(49, 130, 206, 0.2);
         margin-top: 10px;
+        width: 100%;
     }
 
     .btn-deploy:hover {
-        transform: translateY(-5px) scale(1.02);
+        transform: translateY(-3px) scale(1.01);
         box-shadow: 0 20px 40px rgba(49, 130, 206, 0.3);
         background: #2b6cb0;
     }
 
-    .btn-svg { width: 20px; height: 20px; }
+    .btn-svg { width: 20px; height: 20px; flex-shrink: 0; }
 
     /* Footer */
     .register-footer {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 15px;
         border-top: 2px solid #f8fafc;
-        padding-top: 35px;
+        padding-top: 25px;
     }
-    .register-footer p { font-size: 0.85rem; color: var(--reg-text-muted); font-weight: 700; }
+    .register-footer p { font-size: 0.85rem; color: var(--reg-text-muted); font-weight: 700; margin: 0; }
     .login-link {
         color: var(--reg-dark);
         text-decoration: none;
         font-weight: 900;
-        margin-left: 10px;
+        margin-left: 5px;
         padding-bottom: 2px;
         border-bottom: 2px solid #e2e8f0;
         transition: 0.3s;
+        white-space: nowrap;
     }
     .login-link:hover { border-color: var(--reg-blue); color: var(--reg-blue); }
 
     /* Animations & Utils */
     @keyframes slideUp {
-        from { opacity: 0; transform: translateY(40px); }
+        from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     .field-error { color: #ef4444; font-size: 0.7rem; font-weight: 800; margin-top: 8px; list-style: none; padding-left: 6px; }
-    .error-mt { margin-top: -15px; }
+    .password-error-zone { margin-top: -5px; }
 
+    /* Ajustements Media Queries fins */
     @media (max-width: 600px) {
-        .password-grid { grid-template-columns: 1fr; }
-        .register-card { padding: 40px 30px; }
+        .register-terminal-bg { padding: 15px 10px; }
+        .register-card { padding: 40px 24px; border-radius: 30px; }
+        .register-title { font-size: 1.8rem; }
+        .password-grid { grid-template-columns: 1fr; gap: 24px; }
+        .password-error-zone { margin-top: -10px; }
+        .btn-deploy { padding: 18px; font-size: 0.85rem; letter-spacing: 1px; }
     }
 </style>
 @endsection

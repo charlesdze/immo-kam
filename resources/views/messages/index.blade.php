@@ -37,7 +37,7 @@
                                 @endif
                             </div>
                             <div class="sender-details">
-                                <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="sender-name-wrapper">
                                     <h3>{{ $message->sender->name }}</h3>
                                     @if(!$message->is_read)
                                         <span class="new-label">Nouveau</span>
@@ -113,6 +113,7 @@
         border: 2px solid white;
         border-radius: 50%;
         animation: pulseIndicator 2s infinite;
+        flex-shrink: 0;
     }
 
     .new-label {
@@ -123,6 +124,7 @@
         padding: 2px 8px;
         border-radius: 4px;
         text-transform: uppercase;
+        white-space: nowrap;
     }
 
     .messaging-header {
@@ -130,6 +132,7 @@
         justify-content: space-between;
         align-items: flex-end;
         margin-bottom: 40px;
+        gap: 20px;
     }
 
     .header-titles h1 { font-size: 2.2rem; font-weight: 900; margin: 0; text-transform: uppercase; }
@@ -142,6 +145,7 @@
         box-shadow: var(--shadow);
         text-align: center;
         border: 1px solid #eee;
+        white-space: nowrap;
     }
 
     .stats-value { font-size: 1.5rem; font-weight: 900; color: var(--primary); display: block; }
@@ -167,7 +171,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #f8f9fa;
+        gap: 15px;
     }
 
     .sender-avatar {
@@ -181,10 +185,13 @@
         justify-content: center;
         font-weight: 900;
         position: relative;
+        flex-shrink: 0;
     }
 
-    .sender-info { display: flex; align-items: center; gap: 15px; }
-    .sender-details h3 { margin: 0; font-size: 1.1rem; }
+    .sender-info { display: flex; align-items: center; gap: 15px; min-width: 0; }
+    .sender-details { min-width: 0; }
+    .sender-name-wrapper { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .sender-name-wrapper h3 { margin: 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .timestamp { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
 
     .reference-badge {
@@ -194,6 +201,10 @@
         background: #e8f6f3;
         padding: 5px 12px;
         border-radius: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
     }
 
     .card-body { padding: 20px 25px; }
@@ -203,6 +214,7 @@
         color: #555;
         border-left: 3px solid var(--primary);
         padding-left: 15px;
+        word-break: break-word;
     }
 
     .card-footer { padding: 15px 25px; background: #fafafa; display: flex; justify-content: flex-end; }
@@ -216,6 +228,7 @@
         font-weight: 700;
         text-transform: uppercase;
         transition: 0.2s;
+        text-align: center;
     }
 
     .btn-reply { background: var(--dark); color: white; }
@@ -234,6 +247,29 @@
         0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); }
         70% { box-shadow: 0 0 0 8px rgba(243, 156, 18, 0); }
         100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
+    }
+
+    /* ========================================================
+       MEDIA QUERIES : ADAPTATION HUB MESSAGERIE (MOBILE)
+       ======================================================== */
+    @media (max-width: 768px) {
+        .messaging-container { margin: 15px auto; padding: 0 10px; }
+
+        /* 1. Header principal empilé */
+        .messaging-header { flex-direction: column; align-items: flex-start; gap: 15px; margin-bottom: 25px; }
+        .stats-badge { width: 100%; box-sizing: border-box; }
+
+        /* 2. Réorganisation de l'en-tête de carte (Card Header) */
+        .card-header { flex-direction: column; align-items: flex-start; gap: 12px; padding: 15px; }
+        .sender-info { width: 100%; }
+        .sender-name-wrapper h3 { font-size: 1rem; }
+        .reference-badge { align-self: flex-start; max-width: 100%; width: auto; }
+
+        /* 3. Zone de texte et Footer */
+        .card-body { padding: 15px; }
+        .card-footer { padding: 12px 15px; }
+        .footer-actions { width: 100%; gap: 10px; }
+        .btn-reply, .btn-email { flex: 1; padding: 10px 5px; font-size: 0.7rem; }
     }
 </style>
 @endsection

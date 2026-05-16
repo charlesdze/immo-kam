@@ -82,7 +82,7 @@
                 <tbody>
                     @forelse($recentListings as $listing)
                         <tr class="log-row">
-                            <td>
+                            <td data-label="ASSET_ID">
                                 <div class="asset-cell">
                                     <div class="asset-preview">
                                         @php $photos = json_decode($listing->images); @endphp
@@ -90,6 +90,8 @@
                                             <img src="{{ asset('storage/' . $listing->cover_image) }}">
                                         @elseif($photos && count($photos) > 0)
                                             <img src="{{ asset('storage/' . $photos[0]) }}">
+                                        @else
+                                            <div style="width:100%; height:100%; background:#e2e8f0;"></div>
                                         @endif
                                     </div>
                                     <div class="asset-info">
@@ -98,14 +100,14 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="OPERATOR">
                                 <span class="operator-name">{{ $listing->user->name ?? 'ANONYMOUS' }}</span>
                             </td>
-                            <td>
+                            <td data-label="TIMESTAMP">
                                 <span class="mono-date">[{{ $listing->created_at ? $listing->created_at->format('Y-m-d') : '--' }}]</span>
                             </td>
-                            <td class="text-right">
-                                <form action="{{ route('admin.listings.destroy', $listing) }}" method="POST">
+                            <td class="text-right" data-label="COMMAND">
+                                <form action="{{ route('admin.listings.destroy', $listing) }}" method="POST" style="display: inline-block; width: 100%;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" onclick="return confirm('ACTION IRREVERSIBLE : Confirmer la purge ?');" class="btn-purge">
@@ -138,7 +140,7 @@
         max-width: 1200px;
         margin: 40px auto;
         padding: 0 20px;
-        animation: slideIn 0.5s var(--ease-out);
+        animation: slideIn 0.5s ease-out;
     }
 
     /* Status Bar */
@@ -168,12 +170,13 @@
         border-radius: 12px;
         font-size: 0.65rem;
         font-weight: 900;
+        white-space: nowrap;
     }
     .badge-label { color: #94a3b8; margin-right: 5px; }
     .badge-value { color: var(--sentinel-red); }
 
     /* Telemetry Cards */
-    .telemetry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
+    .telemetry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
     .tele-card {
         background: white;
         padding: 35px;
@@ -216,6 +219,7 @@
         border: 1px solid rgba(255,255,255,0.1);
         transition: 0.3s;
         font-family: var(--font-mono);
+        text-align: center;
     }
     .btn-terminal:hover { background: rgba(255,255,255,0.12); transform: translateY(-3px); }
     .btn-master {
@@ -228,6 +232,7 @@
         font-size: 0.75rem;
         box-shadow: 0 6px 0 #2980b9;
         transition: 0.2s;
+        text-align: center;
     }
     .btn-master:hover { transform: translateY(2px); box-shadow: 0 2px 0 #2980b9; }
 
@@ -248,9 +253,10 @@
     
     .log-row { border-bottom: 1px solid #f8fafb; transition: 0.2s; }
     .log-row:hover { background: #fcfdfe; box-shadow: inset 4px 0 0 var(--sentinel-red); }
+    .logs-table td { padding: 20px 30px; }
 
     .asset-cell { display: flex; align-items: center; gap: 18px; }
-    .asset-preview { width: 50px; height: 50px; background: #f1f5f9; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+    .asset-preview { width: 50px; height: 50px; background: #f1f5f9; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; flex-shrink: 0; }
     .asset-preview img { width: 100%; height: 100%; object-fit: cover; }
     
     .asset-name { font-weight: 900; color: var(--sentinel-dark); font-size: 0.9rem; margin-bottom: 2px; }
@@ -263,11 +269,11 @@
         background: #fff5f5; color: var(--sentinel-red); border: 1px solid #feb2b2;
         padding: 8px 18px; border-radius: 10px; font-weight: 900; font-size: 0.65rem;
         text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        width: 100%; max-width: 120px; text-align: center;
     }
     .btn-purge:hover { background: var(--sentinel-red); color: white; border-color: var(--sentinel-red); transform: scale(1.05); }
 
     .empty-log { padding: 80px; text-align: center; color: #cbd5e1; font-family: var(--font-mono); font-weight: 800; font-size: 0.8rem; letter-spacing: 3px; }
-
     .text-right { text-align: right !important; }
 
     @keyframes slideIn {
@@ -277,6 +283,7 @@
 
     .pulse-red {
         width: 10px; height: 10px; background: var(--sentinel-red); border-radius: 50%;
+        box-shrink: 0;
         box-shadow: 0 0 0 rgba(231, 76, 60, 0.4);
         animation: pulse 2s infinite;
     }
@@ -285,6 +292,34 @@
         0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
         100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+    }
+
+    /* ==========================================
+       MEDIA QUERIES : ADAPTATION TERMINAL MOBILE
+       ========================================== */
+    @media (max-width: 768px) {
+        .admin-node-container { margin: 15px auto; padding: 0 10px; }
+        
+        /* 1. Status Bar en Colonne */
+        .status-bar { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
+        .access-level-badge { width: 100%; text-align: center; box-sizing: border-box; }
+
+        /* 2. Alignement Console d'actions */
+        .action-row { flex-direction: column; gap: 12px; }
+        .btn-terminal, .btn-master { width: 100%; box-sizing: border-box; padding: 12px; }
+
+        /* 3. Déstructuration responsive de la table de Logs */
+        .logs-table thead { display: none; } /* On cache les headers */
+        .log-row { display: block; padding: 15px; border-bottom: 2px solid #edf2f7; }
+        .logs-table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 !important; border: none; text-align: right !important; }
+        
+        /* Injection de labels via data-label */
+        .logs-table td::before { content: attr(data-label); font-family: var(--font-mono); font-size: 0.65rem; font-weight: 900; color: #a0aec0; text-align: left; }
+        
+        /* Ajustements d'affichage internes */
+        .asset-cell { width: 100%; justify-content: flex-end; text-align: right; }
+        .text-right { text-align: right !important; }
+        .btn-purge { width: auto; min-width: 100px; }
     }
 </style>
 @endsection
