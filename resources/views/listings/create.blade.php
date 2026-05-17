@@ -6,8 +6,8 @@
     {{-- HEADER : NAVIGATION --}}
     <div class="injection-header">
         <div class="header-content">
-            <h1 class="main-title">Injection <span class="accent">Asset</span></h1>
-            <p class="subtitle">Enregistrement d'une nouvelle unité dans la base Immo-Kam</p>
+            <h1 class="main-title">Déposer une <span class="accent">Annonce</span></h1>
+            <p class="subtitle">Enregistrement d'un nouveau bien dans la plateforme Immo-Kam</p>
         </div>
         <a href="{{ route('listings.index') }}" class="btn-cancel">
             <span class="icon">←</span> ANNULER L'OPÉRATION
@@ -21,7 +21,7 @@
 
             {{-- TITRE --}}
             <div class="form-group full-width">
-                <label for="title">Désignation de l'Asset</label>
+                <label for="title">Titre de l'annonce</label>
                 <div class="input-wrapper @error('title') has-error @enderror">
                     <input type="text" id="title" name="title" placeholder="ex: Villa moderne avec piscine..." value="{{ old('title') }}" required>
                     <span class="focus-border"></span>
@@ -33,10 +33,10 @@
 
             {{-- CATÉGORIE --}}
             <div class="form-group">
-                <label for="category_id">Secteur / Catégorie</label>
+                <label for="category_id">Type de bien / Catégorie</label>
                 <div class="select-container @error('category_id') has-error @enderror">
                     <select id="category_id" name="category_id" required>
-                        <option value="">Sélectionner un secteur...</option>
+                        <option value="">Sélectionner une catégorie...</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                 {{ $category->name }}
@@ -51,7 +51,7 @@
 
             {{-- PRIX --}}
             <div class="form-group">
-                <label for="price">Valeur estimée (XAF)</label>
+                <label for="price">Prix demandé (XAF)</label>
                 <div class="input-wrapper @error('price') has-error @enderror">
                     <input type="number" id="price" name="price" placeholder="Montant en FCFA" value="{{ old('price') }}" required>
                     <span class="unit-tag">XAF</span>
@@ -63,7 +63,7 @@
 
             {{-- LOCALISATION --}}
             <div class="form-group">
-                <label for="location">Coordonnées / Localisation</label>
+                <label for="location">Ville et Quartier / Localisation</label>
                 <div class="input-wrapper @error('location') has-error @enderror">
                     <input type="text" id="location" name="location" placeholder="ex: Bastos, Yaoundé" value="{{ old('location') }}" required>
                 </div>
@@ -88,9 +88,9 @@
 
             {{-- DESCRIPTION --}}
             <div class="form-group full-width">
-                <label for="description">Spécifications techniques (Description)</label>
+                <label for="description">Description détaillée du bien</label>
                 <div class="input-wrapper @error('description') has-error @enderror">
-                    <textarea id="description" name="description" rows="5" placeholder="Détails complets de l'unité..." required>{{ old('description') }}</textarea>
+                    <textarea id="description" name="description" rows="5" placeholder="Nombre de pièces, chambres, commodités, détails complets..." required>{{ old('description') }}</textarea>
                 </div>
                 @error('description')
                     <span class="error-msg">{{ $message }}</span>
@@ -99,12 +99,12 @@
 
             {{-- IMAGE --}}
             <div class="form-group full-width">
-                <label>Capture visuelle (Image de couverture)</label>
+                <label>Photo principale (Image de couverture)</label>
                 <div class="file-upload-zone @error('cover_image') has-error-zone @enderror" id="drop-zone">
                     <input type="file" name="cover_image" id="file-input" accept="image/*" required>
                     <div class="upload-content">
                         <span class="upload-icon" id="upload-icon">📷</span>
-                        <p id="file-name">Glissez une image ici ou cliquez pour explorer</p>
+                        <p id="file-name">Glissez une photo ici ou cliquez pour parcourir vos fichiers</p>
                         <small>Formats acceptés : JPG, PNG, WEBP</small>
                     </div>
                 </div>
@@ -116,8 +116,8 @@
             {{-- ACTIONS --}}
             <div class="form-actions full-width">
                 <button type="submit" class="btn-execute">
-                    <span class="btn-text">EXÉCUTER L'INJECTION</span>
-                    <span class="btn-icon">🚀</span>
+                    <span class="btn-text">PUBLIER L'ANNONCE</span>
+                    <span class="btn-icon">🏠</span>
                 </button>
             </div>
         </form>
@@ -363,7 +363,7 @@
             fileNameDisplay.style.color = "#16a085";
             uploadIcon.innerText = "✅";
         } else {
-            fileNameDisplay.innerText = "Glissez une image ici ou cliquez pour explorer";
+            fileNameDisplay.innerText = "Glissez une photo ici ou cliquez pour parcourir vos fichiers";
             fileNameDisplay.style.color = "var(--dark)";
             uploadIcon.innerText = "📷";
         }

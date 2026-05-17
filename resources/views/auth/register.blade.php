@@ -10,11 +10,11 @@
             <div class="icon-deploy">
                 <x-application-logo />
             </div>
-            <h2 class="register-title">Nouveau <span class="accent">Profil</span></h2>
+            <h2 class="register-title">Créer un <span class="accent">Profil</span></h2>
             <div class="system-path">
-                <span class="path-root">SENTINEL</span>
+                <span class="path-root">INSCRIPTION</span>
                 <span class="path-separator">/</span>
-                <span class="path-active">INIT_ACCESS</span>
+                <span class="path-active">NOUVEAU_COMPTE</span>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
 
             {{-- NOM COMPLET --}}
             <div class="form-field">
-                <label for="name">Nom complet de l'opérateur</label>
+                <label for="name">Nom complet</label>
                 <div class="input-container">
                     <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" placeholder="Ex: Jean Dupont">
                     <div class="input-indicator"></div>
@@ -33,7 +33,7 @@
 
             {{-- EMAIL --}}
             <div class="form-field">
-                <label for="email">Identifiant de messagerie</label>
+                <label for="email">Adresse email</label>
                 <div class="input-container">
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="username" placeholder="nom@exemple.com">
                     <div class="input-indicator"></div>
@@ -44,7 +44,7 @@
             {{-- PASSWORDS GRID --}}
             <div class="password-grid">
                 <div class="form-field">
-                    <label for="password">Clé de sécurité</label>
+                    <label for="password">Mot de passe</label>
                     <div class="input-container">
                         <input type="password" id="password" name="password" required autocomplete="new-password" placeholder="••••••••">
                     </div>
@@ -62,7 +62,7 @@
 
             {{-- BOUTON ACTION --}}
             <button type="submit" class="btn-deploy">
-                <span class="btn-label">DÉPLOYER LE COMPTE</span>
+                <span class="btn-label">Créer mon compte</span>
                 <svg class="btn-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -70,7 +70,7 @@
 
             {{-- REDIRECTION LOGIN --}}
             <div class="register-footer">
-                <p>Déjà membre du réseau ? 
+                <p>Déjà inscrit sur la plateforme ? 
                     <a href="{{ route('login') }}" class="login-link">S'identifier</a>
                 </p>
             </div>

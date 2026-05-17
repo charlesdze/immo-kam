@@ -10,10 +10,10 @@
             <div class="logo-shield">
                 <x-application-logo />
             </div>
-            <h2 class="auth-title">Accès <span class="accent">Sentinel</span></h2>
+            <h2 class="auth-title">Espace <span class="accent">Client</span></h2>
             <div class="auth-status-bar">
                 <span class="status-dot"></span>
-                <p>VÉRIFICATION DES IDENTIFIANTS REQUIS</p>
+                <p>Connexion sécurisée à votre compte</p>
             </div>
         </div>
 
@@ -22,9 +22,9 @@
 
             {{-- CHAMP EMAIL --}}
             <div class="auth-group">
-                <label for="email">Identifiant Opérateur (Email)</label>
+                <label for="email">Adresse Email</label>
                 <div class="input-control">
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="nom@agence.immo">
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="votre@email.com">
                     <div class="input-glow"></div>
                 </div>
                 <x-input-error :messages="$errors->get('email')" class="auth-error" />
@@ -32,7 +32,7 @@
 
             {{-- CHAMP PASSWORD --}}
             <div class="auth-group">
-                <label for="password">Code d'accès sécurisé</label>
+                <label for="password">Mot de passe</label>
                 <div class="input-control">
                     <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••">
                     <div class="input-glow"></div>
@@ -46,23 +46,23 @@
                     {{-- Utilisation de la classe visually-hidden pour préserver l'accessibilité clavier --}}
                     <input type="checkbox" id="remember" name="remember">
                     <span class="checkmark"></span>
-                    <span class="label-text">Maintenir la session</span>
+                    <span class="label-text">Se souvenir de moi</span>
                 </label>
                 
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="forgot-link">Passcode perdu ?</a>
+                    <a href="{{ route('password.request') }}" class="forgot-link">Mot de passe oublié ?</a>
                 @endif
             </div>
 
             {{-- BOUTON VALIDATION --}}
             <button type="submit" class="btn-auth-submit">
                 <span class="btn-shimmer"></span>
-                <span class="btn-content">INITIALISER LA CONNEXION</span>
+                <span class="btn-content">Se connecter</span>
             </button>
 
             {{-- FOOTER --}}
             <div class="auth-footer">
-                <p>Nouvel opérateur ? <a href="{{ route('register') }}" class="register-link">Enregistrer l'accès</a></p>
+                <p>Pas encore membre ? <a href="{{ route('register') }}" class="register-link">Créer un compte</a></p>
             </div>
         </form>
     </div>
